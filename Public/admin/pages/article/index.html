@@ -1,0 +1,136 @@
+<section class="content-header">
+    <h1>新闻列表</h1>
+</section>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/admin/dist/js/UE/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/admin/dist/js/UE/ueditor.all.min.js"> </script>
+<section class="content">
+    <div class="box-header">
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="width:5%;">uid</th>
+                <th>标题</th>
+                <th style="width:30%;">摘要</th>
+                <th style="width:10%;">标签</th>
+                <th>查看数</th>
+                <th>时间</th>
+                <th>状态</th>
+                <th style="width:10%;">操作</th>
+            </tr>
+            </thead>
+            <tbody id="articlelist">
+            </tbody>
+        </table>
+        <br>
+        <div id="pages" ></div>
+    </div>
+</section>
+<script type="text/html" id="article">
+    {{# for(var i = 0,len = d.length; i < len; i++) { }}
+    <tr>
+        <td>{{d[i].uid}}</td>
+        <td>{{d[i].title}}</td>
+        <td>{{d[i].abstract}}</td>
+        <td>{{d[i].tag}}</td>
+        <td>{{d[i].viewnum}}</td>
+        <td>{{laytpl.formatTime(d[i].time)}}</td>
+        <td>{{laytpl.onlineStatus(d[i].status)}}</td>
+        <td>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary">管理</button>
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:void(0);" data-id="{{d[i].id}}" id="yulan">预览</a></li>
+                    <li><a href="javascript:void(0);" data-id="{{d[i].id}}" data-status="1" class="online">上线</a></li>
+                    <li><a href="javascript:void(0);" data-id="{{d[i].id}}" data-status="0" class="online">下线</a></li>
+                    <li><a href="javascript:void(0);" data-id="{{d[i].id}}" class="deletebtn">删除</a></li>
+                </ul>
+            </div>
+        </td>
+    </tr>
+    {{# } }}
+</script>
+<script type="text/html" id="detailtem">
+    <div class="container">
+        <h1 class="text-center">{{d.title}}</h1>
+        <div>
+            {{d.content}}
+        </div>
+    </div>
+</script>
+<script>
+    var data={'start':0,'length':20};
+    var uri = "{:U('Admin/getArticleList','','')}";
+    var showData= function (data) {
+        laytpl($('#article').html()).render(data,function (html) {
+            $('#articlelist').html(html);
+        });
+    }
+    laypage({
+        cont: 'pages', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: 100, //总页数
+        groups: 5,
+        skin: 'molv',
+        jump: function(obj){
+            data['start']=(obj.curr-1)*data['length'];
+            request(data,uri,showData);
+        }
+    });
+    var display = function(v){
+       if(v==true){
+           layer.msg('操作成功!');
+       }else{
+           layer.msg('操作失败!');
+       }
+        setTimeout(function(){
+            request(data,uri,showData);
+        },1000);
+    }
+
+    $(document).on('click','.deletebtn',function(){
+        var data={'id':$(this).data('id')};
+        var url = "{:U('Admin/articleDelete','','')}";
+        request(data,url,display);
+
+    });
+    $(document).on('click','.online',function(){
+        var data={'id':$(this).data('id'),'status':$(this).data('status')};
+        var url = "{:U('Admin/articleOnline','','')}";
+        request(data,url,display);
+
+    });
+    var showDetail= function (data) {
+        var html =laytpl($('#detailtem').html()).render(data);
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['100%', '100%'], //宽高
+            content:html
+        });
+
+    }
+    $(document).on('click','#yulan',function () {
+        var data={'id':$(this).data('id')};
+        var url = "{:U('Admin/getArticleDetail','','')}";
+        request(data,url,showDetail);
+    })
+
+    laytpl.formatTime=function(nS){
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+    }
+    laytpl.onlineStatus = function (v) {
+        if(v==1){
+            return '已上线';
+        }else if(v==0){
+            return '未上线';
+        }else{
+            return '未知';
+        }
+    }
+
+</script>

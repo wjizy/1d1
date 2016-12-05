@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3 col-md-2">
+            <ul class="nav nav-pills nav-stacked ">
+                <li role="presentation" {$active[1]}><a href="{:U('Person/PersonInfo',array('type'=>1),'')}">基本信息</a></li>
+                <li role="presentation" {$active[2]}><a href="{:U('Person/PersonInfo',array('type'=>2),'')}">教员信息</a></li>
+                <li role="presentation"><a href="{:U('Index/teacherList')}">寻找教员</a></li>
+                <li role="presentation" {$active[3]}><a href="{:U('Person/PersonInfo',array('type'=>3),'')}">修改密码</a></li>
+                <if condition="$Think.session.login.admin eq 1">
+                    <li role="presentation"><a href="{:U('Admin/back','','')}">后台管理</a></li>
+                </if>
+
+            </ul>
+        </div>
+        <div class="col-xs-9 col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <if condition="$chooseType eq 1">
+                     <include file="./Public/tpl/base.html" />
+                        <elseif condition="$chooseType eq 2" />
+                            <include file="./Public/tpl/teInfo.html" />
+                            <elseif condition="$chooseType eq 3" />
+                            <include file="./Public/tpl/pass.html" />
+                    </if>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

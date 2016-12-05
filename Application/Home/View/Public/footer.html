@@ -1,0 +1,393 @@
+
+
+<p class="text-center" style="margin-top: 50px;"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257890326'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1257890326%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>豫ICP备14023182号-2  Designed By <a href="http://www.1d1.com/" target="_blank">1d1.com</a>.  &copy; All right reserved</p>
+</body>
+<script type="text/javascript">
+ $(function () {
+     $("a").focus(function(){this.blur()});
+     nickname = false;
+     passwd    = false;
+     phone     = false;
+     QQ        = false;
+     yzm       = false;
+     $('#inputNickname3').blur(function () {
+          var lengths = $(this).val().length;
+          if(lengths > 6 || lengths<2){
+              nickname = false;
+              $(this).css('border-color','red');
+              $('#nickname').text('姓名长度不符合').css('color','red');
+          }else{
+              nickname = true;
+              $(this).css('border-color','green');
+              $('#nickname').text('');
+
+          }
+     })
+     $('#inputPassword3').blur(function () {
+         var lengths = $(this).val().length;
+         if(lengths < 6 || lengths > 15){
+             passwd    = false;
+             $(this).css('border-color','red');
+             $('#passwd').text('密码长度不符合').css('color','red');
+         }else{
+             passwd    = true;
+             $(this).css('border-color','green');
+             $('#passwd').text('');
+         }
+     })
+     $('#inputPassword').blur(function () {
+         var pwd= $(this).val();
+         var pass =  $('#inputPassword3').val();
+         if(pwd != pass){
+             passwd    = false;
+             $(this).css('border-color','red');
+             $('#pwd').text('两次密码输入不相同').css('color','red');
+         }else{
+             passwd    = true;
+             $(this).css('border-color','green');
+             $('#pwd').text('');
+         }
+     })
+     $('#inputPhone3').blur(function(){
+         var part =/^1[3|4|5|7|8]\d{9}$/;
+         if(!part.test($(this).val())){
+             phone     = false;
+             $(this).css('border-color','red');
+             $('#phone').text('手机号格式不正确').css('color','red');
+         }else{
+             phone     = true;
+             $(this).css('border-color','green');
+             $('#phone').text('');
+         }
+     })
+     $('#inputQQ3').blur(function(){
+         var lengths = $(this).val().length;
+
+         if(parseInt($(this).val()) == NaN || lengths < 4 || lengths > 12){
+             QQ = false;
+             $(this).css('border-color','red');
+             $('#QQ').text('QQ格式不正确').css('color','red');
+         }else{
+             QQ     = true;
+             $(this).css('border-color','green');
+             $('#QQ').text('');
+         }
+     })
+     $('#zhuce').click(function () {
+         $('#inputQQ3').val('').css('border-color','');
+         $('#inputPhone3').val('').css('border-color','');
+         $('#inputPassword').val('').css('border-color','');
+         $('#inputPassword3').val('').css('border-color','');
+         $('#inputNickname3').val('').css('border-color','');
+         $('#inputyanzm3').val('').css('border-color','');
+         $('#nickname').html('');
+         $('#passwd').html('');
+         $('#pwd').html('');
+         $('#phone').html('');
+         $('#QQ').html('');
+         $('#yanzm').html('');
+         nickname  = false;
+         passwd    = false;
+         phone     = false;
+         QQ        = false;
+         yzm       = false;
+         var a = Number(Math.ceil(Math.random()*50));
+         var b = Number(Math.ceil(Math.random()*50));
+         $('#a').text(a);
+         $('#b').text(b);
+         c = a + b;
+     })
+     $('#inputyanzm3').blur(function () {
+          var d = Number($(this).val());
+         if(d == c){
+             yzm       = true;
+             $(this).css('border-color','green');
+         }else{
+             yzm       = false;
+             $(this).css('border-color','red');
+         }
+     })
+     $('#register').click(function () {
+         if(nickname && passwd && phone && QQ && yzm){
+             $.ajax({
+                 type:'POST',
+                 dataType:'json',
+                 data:$("#empform").serialize(),
+                 url:"{:U('Index/register','','')}",
+                 success:function (datas) {
+                   if(datas == 1){
+                       var url = "{:U('Person/PersonInfo',array('type'=>1),'')}";
+                       window.location.href=url;
+                   }else{
+                       layer.alert(datas);
+                   }
+                 }
+             })
+         }else{
+             layer.alert('请完成信息后注册！');
+         }
+     })
+     $('#deng').click(function () {
+       yan();
+     })
+     function yan(){
+         var e = Number(Math.ceil(Math.random()*50));
+         var f = Number(Math.ceil(Math.random()*50));
+         yanzhengma    = false;
+         $('#e').text(e);
+         $('#f').text(f);
+         h = e - f;
+     }
+     $('#yanzhengma').blur(function () {
+         var d = Number($(this).val());
+         if(d == h){
+             yanzhengma       = true;
+             $(this).css('border-color','green');
+         }else{
+             yanzhengma       = false;
+             $(this).css('border-color','red');
+         }
+     })
+     $('#login').click(function () {
+
+         if(yanzhengma){
+             yan();
+             $.ajax({
+                 type:'POST',
+                 dataType:'json',
+                 data:$("#loginForm").serialize(),
+                 url:"{:U('Index/login','','')}",
+                 success:function (datas) {
+                     if(datas == 'success'){
+                         var url = "{:U('Person/PersonInfo','','')}?type=1";
+                         window.location.href=url;
+                     }else{
+                         $('#failed').text(datas).css('color','red');
+                     }
+                 }
+             })
+         }else{
+        	 layer.alert('请填写正确验证码');
+         }
+
+     })
+     $('#modify').click(function () {
+         $.ajax({
+             type:'POST',
+             dataType:'json',
+             data:$("#modifyPwd").serialize(),
+             url:"{:U('Person/modify','','')}",
+             success:function (datas) {
+                 if(datas == 1){
+                	 layer.alert('修改过成功！请重新登陆')
+                     window.location.reload();
+                 }else{
+                     $('#statusInfo').removeClass().css('display','block');
+                     $('#statusInfo').addClass('alert alert-danger').text('修改失败');
+                 }
+             }
+         })
+     })
+     $('#photo').change(function () {
+         $('#photoForm').submit();
+     })
+     $('#applySub').click(function () {
+         var urls = "{:U('Person/apply','','')}";
+         $.ajax({
+             type:'POST',
+             dataType:'json',
+             data:$("#applyTeacher").serialize(),
+             url:urls,
+             success:function (da) {
+                 if(da == 1){
+                     var urlss ="{:U('Person/PersonInfo','','')}?type=2";
+                     window.location.href=urlss;
+                 }else{
+                	 layer.alert(da);
+                 }
+             }
+         })
+     })
+
+    $(document).off('#searchName').on('click','#searchName',function(){
+        $.ajax({
+            type:'POST',
+            url:"{:U('Index/searchTeacher','','')}",
+            dataType:'json',
+            data:{'name':$('#searchTeacher').val()},
+            success:function(da){
+                var tea_list_info = '';
+                for(var key in da){
+                    var us = "{:U('Index/teacherInfo','','')}?uid="+da[key]['uid'];
+                    tea_list_info+='<a href="'+us+'" data-time="'+da[key]["time"]+'"><div class="col-xs-12 col-md-6 row_line"><div class="row"><div class="col-xs-5 col-md-1"><img src="__PUBLIC__'+da[key]['photo']+'" alt=""  class="photo_pic" > </div> <div class="col-xs-7 col-md-6 col-md-offset-2" > <div class="row"> <label class="te_name">'+da[key]["name"]+'</label> <span class="te_sex">'+sex(da[key]["sex"])+'</span> </div> <div class="row"> <label>主攻科目：</label><span class="te_class">'+da[key]["subject"]+'</span> </div> <div class="row"> <label>授课年级：</label><span class="te_subject">'+da[key]["class"]+'</span> </div> <div class="row"> <label>所在城市：</label><span class="te_address">'+da[key]["region"]+' </span> </div> </div> </div></div></a>'
+                }
+
+                lasttime=$('div#wj a').last().data('time');
+                $('#wj').html(tea_list_info);
+            }
+
+        })
+    });
+     $('.shuaixuan').mouseover(function () {
+         $(this).css({'display':'block','background-color':'#227ADB','border-radius':'15px','color':'black'});
+     })
+     $('.shuaixuan').mouseout(function () {
+         $(this).css({'background-color':'','color':''});
+     })
+     chosed_class   = '';
+     chosed_subject = '';
+     chosed_sex     = '';
+     chosed_city    = '';
+     $('.shuaixuan_class').click(function () {
+         $(window).scrollTop(0);
+         $('#list_over').css('display','none');
+         var datas = $(this).data('data');
+         var res = '<span class="label label-primary" style="position: relative">'+$(this).text()+'<a href="javascript:void(0);"  class="close_label" data-class="'+datas+'">x</a></span>';
+         $('#condition .chose_class').html(res)
+         chosed_class = datas;
+         index_data()
+
+     })
+     $('.shuaixuan_subject').click(function () {
+         $(window).scrollTop(0);
+         $('#list_over').css('display','none');
+         var datas = $(this).data('data');
+         var res = '<span class="label label-success" style="position: relative">'+$(this).text()+'<a href="javascript:void(0);"  class="close_label" data-subject="'+datas+'">x</a></span>';
+         $('#condition .chose_subject').html(res);
+         chosed_subject = datas;
+         index_data()
+     })
+     $('.shuaixuan_sex').click(function () {
+         $(window).scrollTop(0);
+         $('#list_over').css('display','none');
+         var datas = $(this).data('data')
+         var res = '<span class="label label-info" style="position: relative">'+$(this).text()+'<a href="javascript:void(0);" class="close_label" data-sex="'+datas+'">x</a></span>';
+         $('#condition .chose_sex').html(res)
+         chosed_sex = datas
+         index_data()
+     })
+     $('.shuaixuan_city').click(function(){
+         $(window).scrollTop(0);
+         $('#list_over').css('display','none');
+         var datas = $(this).data('data')
+         var res = '<span class="label label-danger" style="position: relative">'+$(this).text()+'<a href="javascript:void(0);" class="close_label" data-city="'+datas+'">x</a></span>';
+         $('#condition .chose_city').html(res)
+         chosed_city = datas
+         index_data()
+     })
+     $('#condition').on('click','.close_label',function () {
+             $(window).scrollTop(0);
+         $('#list_over').css('display','none');
+             if($(this).data('sex') != undefined){
+                chosed_sex = '';
+             }
+             if($(this).data('subject') != undefined){
+                 chosed_subject = '';
+             }
+             if($(this).data('class') != undefined){
+                 chosed_class = '';
+             }
+             if($(this).data('city') != undefined){
+                 chosed_city = '';
+             }
+             $(this).parent().html('')
+             index_data()
+     })
+     function sex(s){
+         if(s == 1){
+             return '男';
+         }else{
+             return '女';
+         }
+     }
+     function index_data(){
+         var u = "{:U('Index/teachers','','')}";
+         var ds=new Object();
+         var ds=param();
+         $.ajax({
+             type:'POST',
+             dataType:'json',
+             data:ds,
+             url:u,
+             success:function (da) {
+                 var tea_list_info = '';
+                 for(var key in da){
+                     var us = "{:U('Index/teacherInfo','','')}?uid="+da[key]['uid'];
+                     tea_list_info+='<a href="'+us+'" data-time="'+da[key]["time"]+'"><div class="col-xs-12 col-md-6 row_line"><div class="row"><div class="col-xs-5 col-md-1"><img src="__PUBLIC__'+da[key]['photo']+'" alt=""  class="photo_pic" > </div> <div class="col-xs-7 col-md-6 col-md-offset-2" > <div class="row"> <label class="te_name">'+da[key]["name"]+'</label> <span class="te_sex">'+sex(da[key]["sex"])+'</span> </div> <div class="row"> <label>主攻科目：</label><span class="te_class">'+da[key]["subject"]+'</span> </div> <div class="row"> <label>授课年级：</label><span class="te_subject">'+da[key]["class"]+'</span> </div> <div class="row"> <label>所在城市：</label><span class="te_address">'+da[key]["region"]+' </span> </div> </div> </div></div></a>'
+                 }
+
+                 lasttime=$('div#wj a').last().data('time');
+                 $('#wj').html(tea_list_info);
+
+             }
+         })
+     }
+     $(document).ready(function(){
+         if(window.location.pathname !== '/index.php/Home/Index/teacherList.html'){
+            $('#searchmodel').empty();
+         }
+     })
+     $(window).scroll(function () {
+         if(window.location.pathname === '/index.php/Home/Index/teacherList.html'){
+             //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+             //$(window).height()获取当前窗体的高度
+             //$(document).height()获取当前文档的高度
+             var bot = 0; //bot是底部距离的高度
+             if ((bot+$(window).scrollTop()) == ($(document).height() - $(window).height())) {
+                 //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+                 //我们需要去异步加载数据了
+                 var index = layer.load();
+                 var u = "{:U('Index/teachers','','')}";
+                 var ds=new Object();
+                 var ds=param();
+                 ds['lastTime'] =  $('div#wj a').last().data('time');
+                 $.ajax({
+                     type:'POST',
+                     dataType:'json',
+                     data:ds,
+                     url:u,
+                     success:function (da) {
+                         layer.close(index);
+                         var tea_list_info = '';
+                         if(da.length !=0){
+                             for(var key in da){
+                                 var us = "{:U('Index/teacherInfo','','')}?uid="+da[key]['uid'];
+                                 tea_list_info+='<a href="'+us+'"  data-time="'+da[key]['time']+'"><div class="col-xs-12 col-md-6 row_line"><div class="row"><div class="col-xs-5 col-md-1"><img src="__PUBLIC__'+da[key]['photo']+'" alt=""  class="photo_pic" > </div> <div class="col-xs-7 col-md-6 col-md-offset-2" > <div class="row"> <label class="te_name">'+da[key]["name"]+'</label> <span class="te_sex">'+sex(da[key]["sex"])+'</span> </div> <div class="row"> <label>主攻科目：</label><span class="te_class">'+da[key]["subject"]+'</span> </div> <div class="row"> <label>授课年级：</label><span class="te_subject">'+da[key]["class"]+'</span> </div> <div class="row"> <label>所在城市：</label><span class="te_address">'+da[key]["region"]+' </span> </div> </div> </div></div></a>'
+                             }
+                             $('#wj').append(tea_list_info);
+                             lasttime=$('div#wj a').last().data('time');
+                         }else{
+
+                             $('#list_over').css('display','block');
+                             layer.msg('到底啦~');
+                         }
+                     }
+                 })
+             }
+
+         }
+
+     });
+     function param(){
+         var ds =new Object();
+         var dss=new Object();
+         ds['subject'] = chosed_subject;
+         ds['class']   = chosed_class;
+         ds['sex']     = chosed_sex;
+         ds['city']    = chosed_city;
+         for(var index in ds){
+             if(ds[index] !== ""){
+                 dss[index] = ds[index];
+             }
+         }       
+         return ds;
+     }
+ });
+function uploadFileError(error){
+    layer.msg(error);
+}
+ function uploadFile (name){
+    document.getElementById('pic').src=name;
+ }
+</script>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>管理后台</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="__PUBLIC__/admin/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/admin/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/admin/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/admin/plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="__PUBLIC__/admin/dist/img/user.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p id="username">王军</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+        </div>
+      </div>
+      <ul class="sidebar-menu" id="leftside">
+          <!--leftside.js-->
+      </ul>
+    </section>
+  </aside>
+
+  <!-- jQuery 2.2.3 -->
+  <script src="__PUBLIC__/admin/plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="__PUBLIC__/admin/bootstrap/js/bootstrap.min.js"></script>
+
+  <!-- left side -->
+  <script src="__PUBLIC__/admin/dist/js/leftside7.js"  charset="utf-8"></script>
+
+  <!-- Bootstrap WYSIHTML5 -->
+  <script src="__PUBLIC__/admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+  <!-- Slimscroll -->
+  <script src="__PUBLIC__/admin/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="__PUBLIC__/admin/dist/js/app.min.js"></script>
+
+  <script src="__PUBLIC__/admin/dist/layer/layer.js"></script>
+  <script src="__PUBLIC__/admin/dist/laypage/laypage.js"></script>
+  <script src="__PUBLIC__/admin/dist/laytpl/laytpl.js"></script>
+  <script src="__PUBLIC__/admin/dist/js/comm.js"></script>
+  <script>
+    $(function(){
+      $('.user-panel').click(function () {
+        window.location.href="{:U('Person/PersonInfo','','')}";
+      })
+    });
+
+    var display = function(data){
+      $('#username').html(data.phone);
+    }
+    var url = "{:U('Admin/getAdminInfo','','')}";
+    var data = {};
+    request(data,url,display);
+
+  </script>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <if condition="$m eq 0">
+      <include file="./Public/admin/pages/default/index.html" />
+      <elseif condition="$m eq 1" />
+        <include file="./Public/admin/pages/user/index.html" />
+      <elseif condition="$m eq 2" />
+        <include file="./Public/admin/pages/article/index.html" />
+      <elseif condition="$m eq 3" />
+      <include file="./Public/admin/pages/article/write.html" />
+     </if>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer"></footer>
+
+</div>
+<!-- ./wrapper -->
+
+
+</body>
+</html>

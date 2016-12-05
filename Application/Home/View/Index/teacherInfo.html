@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="list-group">
+                <a href="#" class="list-group-item active">
+                    基本资料
+                </a>
+                <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-2"><strong>姓名：</strong></div><div class="col-md-4">{$teacherInfo["name"]}</div>
+                                    <div class="col-md-2"><strong>性别：</strong></div><div class="col-md-4">{$teacherInfo["sex"] ? '男':'女'}</div>
+                                </div>
+                                <div class="gap"></div>
+                                <div class="row">
+                                    <div class="col-md-2"><strong>大学：</strong></div><div class="col-md-4">{$teacherInfo["college"]}</div>
+                                    <div class="col-md-2"><strong>专业：</strong></div><div class="col-md-4">{$teacherInfo["major"]}</div>
+                                </div>
+                                <div class="gap"></div>
+                                <div class="row">
+                                    <div class="col-md-2"><strong>所在城市：</strong></div><div class="col-md-4">{$teacherInfo["region"]}</div>
+                                    <div class="col-md-2"><strong>在读：</strong></div><div class="col-md-4">{$teacherInfo["study"] ? '<span aria-hidden="true" class="glyphicon glyphicon-ok"></span>' : '<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>' }</div>
+                                </div>
+                                <div class="gap"></div>
+                                <div class="row">
+                                    <div class="col-md-2"><strong>主辅科目：</strong></div><div class="col-md-4">{$teacherInfo["subject"]}</div>
+                                    <div class="col-md-2"><strong>电话：</strong></div><div class="col-md-4">0394-7817858</div>
+                                </div>
+                                <div class="gap"></div>
+                                <div class="row">
+                                    <div class="col-md-2"><strong>授课年级：</strong></div><div class="col-md-6">{$teacherInfo["class"]}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img src="__PUBLIC__/{$teacherInfo[photo]}" alt="" style="width: 150px;height: 150px;">
+                                    </div>
+                                </div>
+                                <div class="gap"></div>
+                                <div class="row" >
+                                    <div class="col-md-9 col-md-offset-2">
+                                        <button class="btn btn-success" data-toggle="modal" href="#zhiding" >指定TA</button>
+                                    </div>
+                                    <div class="modal fade" id="zhiding" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="loginModalLabel"></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h4>这个老师还不错吧，快快与他（她）联系!</h4>
+                                                    <h4>手机：18336597573</h4>
+                                                    <h4>电话：0394-7817858</h4>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                </li>
+
+            </ul>
+
+            <ul class="list-group">
+                <a href="#" class="list-group-item active">
+                    个人介绍
+                </a>
+                <li class="list-group-item layouts">
+                    {$teacherInfo["phistory"]}
+                </li>
+
+            </ul>
+            <ul class="list-group">
+                <a href="#" class="list-group-item active">
+                    学科理解
+                </a>
+                <li class="list-group-item layouts" >
+                    {$teacherInfo["subjectinfo"]}
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>

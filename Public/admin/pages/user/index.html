@@ -1,0 +1,173 @@
+<section class="content-header">
+    <h1>用户管理</h1>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <form action="" class="form-inline">
+                筛选：
+                <select name="status" id="teacherStatus" class="form-control">
+                    <option value="2">全部</option>
+                    <option value="0">未上线</option>
+                    <option value="1">已上线</option>
+                </select>
+                <div id="pages" class="form-control"></div>
+                <div class="pull-right">
+                <input class="form-control" type="text" id="searchInfo" placeholder="手机号/QQ/UID">
+                <select name="" id="searchType" class="form-control">
+                    <option value="phone">手机号</option>
+                    <option value="qq">QQ</option>
+                    <option value="uid">UID</option>
+                </select>
+                <button type="button" class="btn btn-success" id="searchUser">查询</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>UID</th>
+                    <th>姓名</th>
+                    <th>手机号</th>
+                    <th>QQ</th>
+                    <th>教员</th>
+                    <th>时间</th>
+                    <th>上线</th>
+                    <th>状态</th>
+                    <th>权限</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="userinfo">
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+</section>
+<script type="text/html" id="userList">
+    {{# for(var i = 0,len = d.length; i < len; i++) { }}
+        <tr>
+            <td>{{d[i].id}}</td>
+            <td>{{d[i].realname}}</td>
+            <td>{{d[i].phone}}</td>
+            <td>{{d[i].qq}}</td>
+            <td>{{laytpl.teacherType(d[i].type)}}</td>
+            <td>{{laytpl.formatTime(d[i].time)}}</td>
+            <td>{{laytpl.onlineStatus(d[i].search_status)}}</td>
+            <td>{{laytpl.teacherStatus(d[i].status)}}</td>
+            <td>{{laytpl.teacherAdmin(d[i].admin)}}</td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">管理</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a target="_blank" href="{:U('Index/teacherInfo','','')}?uid={{d[i].id}}";>前往主页</a></li>
+                        <li><a href="javascript:void(0);" data-uid="{{d[i].id}}" data-status="1" class="teacherOnline">教员上线</a></li>
+                        <li><a href="javascript:void(0);" data-uid="{{d[i].id}}" data-status="0" class="teacherOnline">教员下线</a></li>
+                        <li><a href="javascript:void(0);" data-uid="{{d[i].id}}" class="banAccount">封禁账号</a></li>
+                        <li><a href="javascript:void(0);" data-uid="{{d[i].id}}" class="resetpwd">重置密码</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {{# } }}
+</script>
+<script>
+    var user_data={'start':0,'length':20,'status':2};
+    var user_url= "{:U('Admin/getUserList','','')}";
+    var showUserInfo = function (data) {
+        laytpl($('#userList').html()).render(data,function (html) {
+          $('#userinfo').html(html);
+        });
+    }
+    $(document).on('change','#teacherStatus',function () {
+        user_data['status']=$(this).val();
+        request(user_data,user_url,showUserInfo);
+    })
+    laypage({
+        cont: 'pages', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: 100, //总页数
+        groups: 5,
+        skin: 'molv',
+        jump: function(obj){
+            user_data['start']=(obj.curr-1)*user_data['length'];
+            request(user_data,user_url,showUserInfo);
+        }
+    });
+    laytpl.teacherType = function(v){
+        if(v == 2){
+            return '教员';
+        }else if(v == 1){
+            return '非教员';
+        }
+    }
+    laytpl.teacherStatus =function (v) {
+        if(v==1){
+            return '<span class="label label-success">正常</span>';
+        }else if(v==0){
+            return '<span class="label label-danger">已封禁</span>';
+        }
+    }
+    laytpl.teacherAdmin =function(v){
+       if(v==1){
+           return '<span class="label label-success">管理员</span>';
+       }else if(v==0){
+           return '<span class="label label-info">普通用户</span>';
+       }
+    }
+    laytpl.onlineStatus = function (v) {
+       if(v==1){
+           return '已上线';
+       }else if(v==0){
+           return '未上线';
+       }else{
+           return '未知';
+       }
+    }
+    laytpl.formatTime=function(nS){
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+    }
+    $(document).on('click','#searchUser',function () {
+       var search_data = {'select':$('#searchType').val(),'condition':$('#searchInfo').val()};
+       var search_url ="{:U('Admin/searchUser','','')}";
+       request(search_data,search_url,showUserInfo);
+    });
+    var display=function (data) {
+       if(data==true){
+           layer.msg('操作成功!');
+       }else if(data==false){
+           layer.msg('操作失败!');
+       }
+       setTimeout(function(){
+           request(user_data,user_url,showUserInfo);
+       },1000);
+    }
+    $(document).on('click','.teacherOnline',function () {
+        var online_data = {'status':$(this).data('status'),'uid':$(this).data('uid')};
+        var online_url = "{:U('Admin/teacherStatus','','')}";
+        request(online_data,online_url,display);
+    })
+    $(document).on('click','.banAccount',function () {
+        var ban_data = {'uid':$(this).data('uid')};
+        var ban_url = "{:U('Admin/shutUser','','')}";
+        request(ban_data,ban_url,display);
+    })
+    var resetpasswd = function (data) {
+       if(data==true){
+            layer.alert('密码是：1d1edu');
+       } else if(data == false){
+           layer.alert('操作失败!');
+       }
+    }
+    $(document).on('click','.resetpwd',function () {
+        var reset_data = {'uid':$(this).data('uid'),'pwd':'1d1edu'};
+        var reset_url = "{:U('Admin/resetPwd','','')}";
+        request(reset_data,reset_url,resetpasswd);
+    })
+</script>

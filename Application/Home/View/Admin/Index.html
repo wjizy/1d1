@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/bootstrap.min.css" media="screen"/>
+    <link rel="stylesheet" href="__PUBLIC__/css/main.css" media="screen"/>
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">
+       <div class="row">
+           <div class="col-md-3">
+               账号：{$info['phone']}   名字：{$info['nickname']}
+           </div>
+           <div class="col-md-2 col-md-offset-7">
+               <a href="{:U('Admin/Index')}">首页</a>
+               <a href="{:U('Person/PersonInfo')}?type=1">个人中心</a>
+               <a href="{:U('Admin/Index')}">退出</a>
+           </div>
+       </div>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item" >
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <input type="text" name="condition" class="form-control"  placeholder="手机号/QQ/UID">
+                        <select name="select" class="form-control">
+                            <option value="phone">手机号</option>
+                            <option value="qq">QQ</option>
+                            <option value="uid">UID</option>
+                        </select>
+                    </div>
+                        <button type="submit" class="btn btn-primary">查询</button>
+                </form>
+            </li>
+            <li class="list-group-item">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        下拉条件筛选<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:U('Admin/Index')}?status=0">未上线教员</a></li>
+                        <li><a href="{:U('Admin/Index')}?status=1">已上线教员</a></li>
+                        <li><a href="{:U('Admin/Index')}">所有用户信息</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+            <table class="table">
+                <tr>
+                    <th>UID</th><th>姓名</th><th>手机号</th><th>QQ</th><th>教员</th><th>时间</th><th>状态</th><th>权限</th><th>操作</th>
+                </tr>
+                <foreach name="list" item="vo">
+                <tr>
+                    <td>{$vo['id']}</td>
+                    <td>{$vo['realname']}</td>
+                    <td>{$vo['phone']}</td>
+                    <td>{$vo['qq']}</td>
+                    <td>{$vo['type']==1 ? 'No':'Yes'}</td>
+                    <td>{$vo['time']|date="Y-m-d H:i",###}</td>
+                    <td>{$vo['status'] ? '正常':'已封禁'}</td>
+                    <td>{$vo['admin']==1 ? '管理员':'普通用户'}</td>
+                    <td>
+                        <if condition="$vo['type'] eq 2">
+                            <a href="{:U('Index/teacherInfo')}?uid={$vo['id']}" target="_blank" class="btn btn-primary">前往主页</a>
+                            |
+                            <if condition="$vo['search_status'] eq 1">
+                                <a href="{:U('Admin/teacherStatus')}?uid={$vo['id']}&status=0" class="btn btn-danger">教员下线</a>|
+                                <else/>
+                                <a href="{:U('Admin/teacherStatus')}?uid={$vo['id']}&status=1" class="btn btn-success">教员上线</a>|
+                            </if>
+
+                        </if>|
+                        <a href="{:U('Admin/shutUser')}?uid={$vo['id']}" class="btn btn-info">封禁账号</a>
+                        |
+                        <a  data-toggle="modal" href="#chongzhiModal{$vo['id']}" data-uid="{$vo['id']}" class="chongzhimima btn btn-warning">重置密码</a>
+                        <div class="modal fade" id="chongzhiModal{$vo['id']}" tabindex="-1" role="dialog" aria-labelledby="chongzhiModal{$vo['id']}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        新密码
+                                    </div>
+                                    <div class="modal-body" id="body{$vo['id']}">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="" class="btn btn-primary" id="queren{$vo['id']}" >确认</a>
+                                        <a href="#" class="btn btn-primary huanyige" data-id="{$vo['id']}" >换一个</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </td>
+                </tr>
+                </foreach>
+
+            </table>
+
+        <div class="pagelist">{$page}</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    function generateMixed(n) {
+        var res = "";
+        for(var i = 0; i < n ; i ++) {
+        var id = Math.ceil(Math.random()*35);
+        res += chars[id];
+        }
+        return res;
+    }
+    function huanyige(uid){
+        var pwd = generateMixed(8);
+        var path= "{:U('Admin/resetPwd')}";
+        $('#body'+uid).text(pwd);
+        $('#queren'+uid).attr('href',path+'?uid='+uid+'&pwd='+pwd);
+    }
+    $(document).on('click','.chongzhimima',function(){
+            huanyige($(this).data('uid'));
+    })
+    $(document).on('click','.huanyige',function(){
+        huanyige($(this).data('id'));
+    })
+</script>
+</html>

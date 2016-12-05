@@ -1,0 +1,394 @@
+<if condition="$teaType eq 1">
+    <table  class="table">
+        <tr>
+            <td ><img src="__PUBLIC__{$teaInfo['photo']}" alt="头像" style="width: 100px; height: 100px;" /></td>
+            <td><button class="btn bg-primary"  data-toggle="modal" href="#xiugaiModal"  id="xiugai">修改信息</button></td>
+        </tr>
+        <tr>
+            <th >姓名：</th><td>{$teaInfo['name']}</td>
+        </tr>
+        <tr>
+            <th>性别：</th><td>{$teaInfo['sex']?'男':'女'}</td>
+        </tr>
+        <tr>
+            <th>大学：</th><td> {$teaInfo['college']}</td>
+        </tr>
+        <tr>
+            <th>专业：</th><td> {$teaInfo['major']}</td>
+        </tr>
+        <tr>
+            <th>是否在读：</th><td>{$teaInfo['study']?'是':'否'}</td>
+        </tr>
+        <tr>
+            <th>所在城市：</th><td>{$teaInfo['region']}</td>
+        </tr>
+        <tr>
+            <th>授课年级：</th><td style="word-break:break-all">{$teaInfo['class']}</td>
+        </tr>
+        <tr>
+            <th> 主攻科目：</th><td style="word-break:break-all">{$teaInfo['subject']}</td>
+        </tr>
+        <tr>
+            <th>个人介绍：</th>
+        </tr>
+        <tr><td style="word-break:break-all;" colspan="2">{$teaInfo['phistory']}</td></tr>
+        <tr>
+            <th>学科解读：</th>
+        </tr>
+        <tr>
+            <td style="word-break:break-all;" colspan="2">{$teaInfo['subjectinfo']}</td>
+        </tr>
+
+    </table>
+    <div class="modal fade" id="xiugaiModal" tabindex="-1" role="dialog" aria-labelledby="xiugaiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="xiugaiModalLabel">修改个人信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="__URL__/photo" role="form" target="upfile" method="post" id="photoForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="photo" class="col-sm-2 control-label">预览</label>
+                            <div class="col-sm-10">
+                                <div  style="width:100px;height:100px;background-color: #1b6d85;">
+                                    <img id="pic" src="__PUBLIC__{$teaInfo['photo']}" alt="" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo" class="col-sm-2 control-label">头像</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="photo" id="photo">(*支持格式jpg,png,jpeg,小于350kB)
+                                <iframe src="" frameborder="0" name="upfile" style="display:none;"></iframe>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal" id="applyTeacher">
+                        <div class="form-group">
+                            <label for="names" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" class="form-control" id="names"
+                                       placeholder="姓名" value="{$teaInfo['name']}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sex" class="col-sm-2 control-label">性别</label>
+                            <div class="col-sm-10">
+                                <select name="sex" id="sex" class="form-control">
+                                    <option {$teaInfo['sex']?'selected':''} value="1">男生</option>
+                                    <option <php>if($teaInfo['sex']==0){echo 'selected=true';}</php>  value="0">女生</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="college" class="col-sm-2 control-label">大学</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="college"  class="form-control" id="college"
+                                       placeholder="例如：周口师范学院" value="{$teaInfo['college']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="majors" class="col-sm-2 control-label">专业</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="major" value="{$teaInfo['major']}" class="form-control" id="majors" placeholder="例如：计算机科学与技术">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="study" class="col-sm-2 control-label">在读</label>
+                            <div class="col-sm-10">
+                                <select name="study" id="study" class="form-control">
+                                    <option {$teaInfo['study']?'selected':''} value="1">在读</option>
+                                    <option <php>if($teaInfo['study']==0){echo 'selected=true';}</php>  value="0">已毕业</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="region" class="col-sm-2 control-label">所在城市</label>
+                            <div class="col-sm-10">
+                            <select name="region" class="form-control" id="region">
+                                <option value="周口"  <php>if($teaInfo['region']==='周口'){echo 'selected=true';}</php> >周口</option>
+                                <option value="郑州"  <php>if($teaInfo['region']==='郑州'){echo 'selected=true';}</php> >郑州</option>
+                                <option value="信阳"  <php>if($teaInfo['region']==='信阳'){echo 'selected=true';}</php> >信阳</option>
+                                <option value="商丘"   <php>if($teaInfo['region']==='商丘'){echo 'selected=true';}</php> >商丘</option>
+                                <option value="南阳"   <php>if($teaInfo['region']=='南阳'){echo 'selected=true';}</php> >南阳</option>
+                                <option value="洛阳"  <php>if($teaInfo['region']=='洛阳'){echo 'selected=true';}</php> >洛阳</option>
+                                <option value="焦作"   <php>if($teaInfo['region']=='焦作'){echo 'selected=true';}</php> >焦作</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="years" class="conl-xs-12 col-md-2 control-label">授课年级</label>
+                            <div class="col-xs-12 col-md-10" id="years">
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="one" {$teaInfo['chose']['one']?'checked':''}  value="1">一年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="two" {$teaInfo['chose']['two']?'checked':''}  value="1">二年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="three" {$teaInfo['chose']['three']?'checked':''}   value="1">三年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="four" {$teaInfo['chose']['four']?'checked':''}   value="1">四年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="five"  {$teaInfo['chose']['five']?'checked':''}  value="1">五年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="six" {$teaInfo['chose']['six']?'checked':''}   value="1">六年级
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="seven"  {$teaInfo['chose']['seven']?'checked':''}   value="1">初一
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="eight"  {$teaInfo['chose']['eight']?'checked':''}   value="1">初二
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="nine"  {$teaInfo['chose']['nine']?'checked':''}   value="1">初三
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="ten"  {$teaInfo['chose']['ten']?'checked':''}   value="1">高一
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="eleven"  {$teaInfo['chose']['eleven']?'checked':''}  value="1">高二
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="twelve"  {$teaInfo['chose']['twelve']?'checked':''}   value="1">高三
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject" class="col-sm-2 control-label">授课学科</label>
+                            <div class="col-sm-10" id="subject">
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="chinese" {$teaInfo['chose']['chinese']?'checked':''} value="1">语文
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="math" {$teaInfo['chose']['math']?'checked':''}  value="1">数学
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="english" {$teaInfo['chose']['english']?'checked':''}  value="1">英语
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="physics"  {$teaInfo['chose']['physics']?'checked':''}   value="1">物理
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="chemistry" {$teaInfo['chose']['chemistry']?'checked':''}  value="1">化学
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="biology" {$teaInfo['chose']['biology']?'checked':''}  value="1">生物
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="politics" {$teaInfo['chose']['politics']?'checked':''}   value="1">政治
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="geography" {$teaInfo['chose']['geography']?'checked':''}   value="1">地理
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="history" {$teaInfo['chose']['history']?'checked':''}  value="1">历史
+                                </label>
+                                <label class="checkbox-inline" >
+                                    <input type="checkbox" name="art"   {$teaInfo['chose']['art']?'checked':''}  value="1">艺术
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phistory" class="col-sm-2 control-label">个人介绍</label>
+                            <div class="col-sm-10">
+                <textarea type="text" name="phistory" class="form-control" id="phistory"
+                          placeholder="介绍自己展示风采">{$teaInfo['phistory']}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectInfo" class="col-sm-2 control-label">学科理解</label>
+                            <div class="col-sm-10">
+                <textarea type="text" name="subjectInfo" class="form-control" id="subjectInfo"
+                          placeholder="说说自己对擅长学科的理解吧">{$teaInfo['subjectinfo']}</textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="etype" value="1" >
+                    </form>
+                    <div class="modal-footer">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="applySub" class="btn btn-primary">马上提交</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <elseif condition="$teaType eq 0"/>
+    <div class="alert alert-info" role="alert">填写完信息，马上当家教！</div>
+    <form class="form-horizontal" action="__URL__/photo" role="form" target="upfile" method="post" id="photoForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="photo" class="col-sm-2 control-label">预览</label>
+            <div class="col-sm-10">
+                <div  style="width:100px;height:100px;">
+                    <img id="pic" src="" alt="" >
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="photo" class="col-sm-2 control-label">头像</label>
+            <div class="col-sm-10">
+                <input type="file" name="photo" id="photo">
+                <iframe src="" frameborder="0" name="upfile" style="display:none;"></iframe>
+            </div>
+        </div>
+    </form>
+    <form class="form-horizontal" id="applyTeacher">
+        <div class="form-group">
+            <label for="names" class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+                <input type="text" name="name" class="form-control" id="names"
+                       placeholder="姓名">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="sex" class="col-sm-2 control-label">性别</label>
+            <div class="col-sm-10">
+                <select name="sex" id="sex" class="form-control">
+                    <option value="1">男生</option>
+                    <option value="0">女生</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="college" class="col-sm-2 control-label">大学</label>
+            <div class="col-sm-10">
+                <input type="text"  name="college"  class="form-control" id="college"
+                       placeholder="例如：周口师范学院">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="majors" class="col-sm-2 control-label">专业</label>
+            <div class="col-sm-10">
+                <input type="text" name="major" class="form-control" id="majors" placeholder="例如：计算机科学与技术">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="study" class="col-sm-2 control-label">在读</label>
+            <div class="col-sm-10">
+                <select name="study" id="study" class="form-control">
+                    <option value="1">是的</option>
+                    <option value="0">已毕业</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="region" class="col-sm-2 control-label">所在城市</label>
+            <div class="col-sm-10">
+                <select name="region" class="form-control" id="region">
+                    <option value="周口">周口</option>
+                    <option value="郑州">郑州</option>
+                    <option value="信阳">信阳</option>
+                    <option value="商丘">商丘</option>
+                    <option value="南阳">南阳</option>
+                    <option value="洛阳">洛阳</option>
+                    <option value="焦作">焦作</option>
+                 </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="years" class="col-sm-2 control-label">授课年级</label>
+            <div class="col-sm-10" id="years">
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="one" value="1">一年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="two"  value="1">二年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="three"   value="1">三年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="four"   value="1">四年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="five"  value="1">五年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="six"   value="1">六年级
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="seven"  value="1">初一
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="eight"  value="1">初二
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="nine"   value="1">初三
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="ten"  value="1">高一
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="eleven"  value="1">高二
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="twelve"   value="1">高三
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="subject" class="col-sm-2 control-label">授课学科</label>
+            <div class="col-sm-10" id="subject">
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="chinese" value="1">语文
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="math"  value="1">数学
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="english"  value="1">英语
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="physics"   value="1">物理
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="chemistry"  value="1">化学
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="biology"  value="1">生物
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="politics"   value="1">政治
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="geography"  value="1">地理
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="history"  value="1">历史
+                </label>
+                <label class="checkbox-inline" >
+                    <input type="checkbox" name="art"   value="1">艺术
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="phistory" class="col-sm-2 control-label">个人介绍</label>
+            <div class="col-sm-10">
+                <textarea type="text" name="phistory" rows="15" class="form-control" id="phistory"
+                       placeholder="介绍自己展示风采"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="subjectInfo" class="col-sm-2 control-label">学科理解</label>
+            <div class="col-sm-10">
+                <textarea type="text" name="subjectInfo" rows="15" class="form-control" id="subjectInfo"
+                          placeholder="说说自己对擅长学科的理解吧"></textarea>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="applySub" class="btn btn-primary">马上提交</button>
+        </div>
+    </div>
+    </if>

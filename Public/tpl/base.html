@@ -1,0 +1,14 @@
+<table class="table">
+    <tbody>
+    <tr><th>姓名</th><td>{$baseInfo.nickname}</td></tr>
+    <tr><th>手机号</th><td>{$baseInfo.phone}</td></tr>
+    <tr><th>QQ</th><td>{$baseInfo.qq}</td></tr>
+    <tr><th>教员状态</th><td>
+        <if condition="$baseInfo.type eq 2">
+            教员
+            <else />
+            非教员（<a href="{:U('Person/PersonInfo',array('type'=>2),'')}">马上当教员</a>）
+        </if>
+    </td></tr>
+    </tbody>
+</table>
